@@ -1,13 +1,38 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
+import NavigationAllView from '@/views/NavigationAllView.vue';
+import NavigationAptView from '@/views/NavigationAptView.vue';
+import NavigationOfficetelView from '@/views/NavigationOfficetelView.vue';
+import NavigationVillaView from '@/views/NavigationVillaView.vue';
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    // {
-    //   path: '/',
-    //   name: 'home',
-    //   component: HomeView
-    // },
+    {
+      path: '/',
+      name: 'main',
+      component: NavigationAllView
+    },
+    {
+      path: '/navi/all',
+      name: 'navi-all',
+      component: NavigationAllView
+    },
+    {
+      path: '/navi/apt',
+      name: 'navi-apt',
+      component: NavigationAptView
+    },
+    {
+      path: '/navi/villa',
+      name: 'navi-villa',
+      component: NavigationOfficetelView
+    },
+    {
+      path: '/navi/officetel',
+      name: 'navi-officetel',
+      component: NavigationVillaView
+    },
     // {
     //   path: '/about',
     //   name: 'about',
