@@ -1,10 +1,15 @@
 <script setup>
+	import { useHouseStore } from '@/stores/counter.js';
+	import HouseSimple from '@/components/HouseSimple.vue';
 
+	const houseStore = useHouseStore();
 </script>
 
 <template>
 	<div>
-		<h1>오피스텔</h1>
+		<template v-for="(house) in houseStore.getOfficetels" :key="house.id">
+			<HouseSimple :house="house"/>
+		</template>
 	</div>
 </template>
 
