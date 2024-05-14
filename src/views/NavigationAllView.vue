@@ -4,7 +4,7 @@
 
 <template>
 	<div>
-		
+		<h1>전체</h1>
 	</div>
 </template>
 

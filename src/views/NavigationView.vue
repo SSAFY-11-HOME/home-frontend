@@ -11,14 +11,10 @@
 
     <!-- 네비게이션 바 [ 전체, 아파트, 다세대 주택, 오피스텔 ] -->
     <div id="navigation-bar">
-      <router-link :to="{ name: 'board' }" class="nav-bt">전체</router-link>
-      <router-link :to="{ name: 'board' }" class="nav-bt">아파트</router-link>
-      <router-link :to="{ name: 'board' }" class="nav-bt">주택</router-link>
-      <router-link :to="{ name: 'board' }" class="nav-bt">오피스텔</router-link>
-      <!-- <div class="nav-bt">전체</div>
-      <div class="nav-bt">아파트</div>
-      <div class="nav-bt">주택</div>
-      <div class="nav-bt">오피스텔</div> -->
+      <router-link :to="{ name: 'navi-all' }" class="nav-bt">전체</router-link>
+      <router-link :to="{ name: 'navi-apt' }" class="nav-bt">아파트</router-link>
+      <router-link :to="{ name: 'navi-villa' }" class="nav-bt">주택</router-link>
+      <router-link :to="{ name: 'navi-officetel' }" class="nav-bt">오피스텔</router-link>
     </div>
 
     <RouterView />

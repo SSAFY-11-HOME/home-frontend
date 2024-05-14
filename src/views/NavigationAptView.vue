@@ -4,7 +4,7 @@
 
 <template>
 	<div>
-		
+		<h1>아파트</h1>
 	</div>
 </template>
 
