@@ -1,5 +1,7 @@
 <script setup>
 import { RouterView } from "vue-router"
+import NavigationDivision from "@/components/NavigationDivision.vue";
+import NavigationSearch from "@/components/NavigationSearch.vue";
 </script>
 
 <template>
@@ -7,9 +9,9 @@ import { RouterView } from "vue-router"
   <div id="container">
 
     <!-- 검색창 -->
-    <input id="search-box" type="text">
+    <NavigationSearch/>
 
-    <hr>
+    <NavigationDivision/>
 
     <!-- 네비게이션 바 [ 전체, 아파트, 다세대 주택, 오피스텔 ] -->
     <div id="navigation-bar">
@@ -19,12 +21,15 @@ import { RouterView } from "vue-router"
       <router-link :to="{ name: 'navi-officetel' }" class="nav-bt">오피스텔</router-link>
     </div>
 
+    <NavigationDivision/>
+
     <!-- 건물 정보 [ 이름, 층, 평, 가격, 거래일 ] 리스트 -->
+    <div id="list-title">📌 주변 실거래가 정보</div>
     <div id="house-list">
       <RouterView />
     </div>
 
-    <hr>
+    <NavigationDivision/>
 
     <!-- 공지사항 -->
     <div id="announcement">
@@ -100,23 +105,34 @@ import { RouterView } from "vue-router"
 }
 
 #container #navigation-bar .nav-bt {
-  border: 1px solid black;
+  /* border: 1px solid black; */
   /* UI 확인 */
 
-  width: 80px;
-  height: 40px;
-
-  border-radius: 8px;
+  width: auto;
+  height: 32px;
 
   text-align: center;
   line-height: 30px;
 
+  font-size: 20px;
+  font-weight: bold;
+
+  color: #3A1D1D;
   text-decoration: none;
 }
 
 #container #house-list {
-  height: 400px;
+  height: 360px;
   overflow-y: scroll;
+}
+
+#container #list-title {
+  margin-left: 24px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  
+  font-size: 20px;
+  font-weight: bold;
 }
 
 #container #house-list::-webkit-scrollbar {
@@ -142,6 +158,9 @@ import { RouterView } from "vue-router"
 }
 
 #container #announcement .middle-title {
+
+  margin-bottom: 12px;
+
   font-size: 20px;
   font-weight: bold;
 }
