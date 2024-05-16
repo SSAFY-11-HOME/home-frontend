@@ -71,6 +71,8 @@ import NavigationSearch from "@/components/NavigationSearch.vue";
   width: 420px; height: 96.5vh;
 
   position: fixed;
+  z-index: 1;
+
   top: 16px;
   left: 16px;
 

@@ -76,7 +76,7 @@ export default {
 
 <style scoped>
 #map {
-	z-index: -1;
+	z-index: 0;
 
 	position: absolute;
 
