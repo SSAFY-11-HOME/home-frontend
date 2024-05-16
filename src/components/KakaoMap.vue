@@ -11,6 +11,8 @@ var map = ref(null);
 const kakaoStore = useKakaoStore();
 const houseStore = useHouseStore();
 
+const markers = ref([]);
+
 onMounted(() => {
 	if(window.kakao && window.kakao.maps) {
 		loadMap();
@@ -46,7 +48,12 @@ function loadMap() {
 
 function dragendMap() {
 
-	window.kakao.maps.event.addListener(map.value, 'dragend', function() {        
+	window.kakao.maps.event.addListener(map.value, 'dragend', function() {  
+
+		// 마커 지우기!!
+		markers.value.forEach((marker) => {
+			marker.setMap(null);
+		})
     
 		// 지도 중심좌표를 얻어옵니다 
 		var latlng = map.value.getCenter(); 
@@ -60,6 +67,20 @@ function dragendMap() {
 				console.log(error);
 			}
 		)
+
+		// 건물 정보 update 이후, 마커 생성
+		houseStore.getHouses.forEach((house) => {
+			// 마커가 표시될 위치입니다 
+			var markerPosition  = new window.kakao.maps.LatLng(house.lat, house.lng);
+
+			// 마커를 생성합니다.
+			var marker = new window.kakao.maps.Marker({
+				position: markerPosition
+			});
+
+			markers.value.push(marker);
+			marker.setMap(map.value);
+		})
 		
 	});
 }
