@@ -13,9 +13,9 @@ defineProps({
 		<div>
 			<div class="flex">
 				<div id="name">{{ house.name }}</div>
-				<div id="floor-area">#{{ house.floor }} #{{ house.parea }}</div>
+				<div id="floor-area">#{{ house.floor }}층 #{{ house.parea }}평</div>
 			</div>
-			<div id="amount">{{ house.dealAmount }}</div>
+			<div id="amount">{{ house.dealAmount }}만원</div>
 		</div>
 
 		<div id="date">{{ house.dealDate }}</div>
