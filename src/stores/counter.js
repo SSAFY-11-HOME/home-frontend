@@ -135,3 +135,16 @@ export const useHouseStore = defineStore('house', () => {
 
   return { houses, getApartmets, getVillas, getOfficetels }
 })
+
+
+export const useKakaoStore = defineStore('kakao', () => {
+  // 1. state
+  const lat = ref(33.450701);
+  const lng = ref(126.570667);
+
+  // 2. getter
+
+  // 3. action
+
+  return { lat, lng }
+})
