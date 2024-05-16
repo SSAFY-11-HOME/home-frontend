@@ -3,11 +3,12 @@
 	import HouseSimple from '@/components/HouseSimple.vue';
 
 	const houseStore = useHouseStore();
+
 </script>
 
 <template>
 	<div>
-		<template v-for="(house) in houseStore.houses" :key="house.id">
+		<template v-for="(house) in houseStore.getHouses" :key="house.id">
 			<HouseSimple :house="house"/>
 		</template>
 	</div>

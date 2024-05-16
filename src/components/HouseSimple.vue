@@ -13,7 +13,7 @@ defineProps({
 		<div>
 			<div class="flex">
 				<div id="name">{{ house.name }}</div>
-				<div id="floor-area">#{{ house.floor }} #{{ house.area }}</div>
+				<div id="floor-area">#{{ house.floor }} #{{ house.parea }}</div>
 			</div>
 			<div id="amount">{{ house.dealAmount }}</div>
 		</div>

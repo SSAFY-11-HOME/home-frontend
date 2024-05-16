@@ -1,12 +1,15 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import { useKakaoStore } from '@/stores/counter';
+import { useKakaoStore, useHouseStore } from '@/stores/counter';
+
+import { selectAllByRange } from '@/api/house';
 
 const {VITE_KAKAO_API_KEY} = import.meta.env;
 
 var map = ref(null);
 
 const kakaoStore = useKakaoStore();
+const houseStore = useHouseStore();
 
 onMounted(() => {
 	if(window.kakao && window.kakao.maps) {
@@ -15,7 +18,6 @@ onMounted(() => {
 		loadScript();
 	}
 })
-
 
 
 function loadScript() {
@@ -49,9 +51,15 @@ function dragendMap() {
 		// 지도 중심좌표를 얻어옵니다 
 		var latlng = map.value.getCenter(); 
 		
-		var message = '변경된 지도 중심좌표는 ' + latlng.getLat() + ' 이고, 경도는 ' + latlng.getLng() + ' 입니다';
-		
-		console.log(message);
+		selectAllByRange(
+			{lat: latlng.getLat(), lng: latlng.getLng()},
+			({data}) => {
+				houseStore.setHouses(data);
+			},
+			(error) => {
+				console.log(error);
+			}
+		)
 		
 	});
 }
