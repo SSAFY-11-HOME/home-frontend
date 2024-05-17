@@ -35,7 +35,7 @@ const router = createRouter({
       component: NavigationVillaView
     },
     {
-      path: '/navi/house/detail',
+      path: '/navi/house/detail/:id',
       name: 'navi-detail',
       component: NavigationDetailView
     },

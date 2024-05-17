@@ -8,7 +8,7 @@ defineProps({
 </script>
 
 <template>
-	<router-link :to="{ name: 'navi-detail' }" class="nav-bt">
+	<router-link :to="{ name: 'navi-detail', params: {id: house.id} }" class="nav-bt">
 		<div id="house-simple-info-box">
 
 			<div>
