@@ -7,13 +7,13 @@ function selectAllByRange(param, success, fail){
 	.catch(fail);
 }
 
-function selectOneById(param, success, fail){
-	myaxios.get('/house/area', {param})
+function selectAllById(param, success, fail){
+	myaxios.get(`/house/apt?id=${param}`)
 	.then(success)
 	.catch(fail);
 }
 
 
 export {
-	selectAllByRange, selectOneById
+	selectAllByRange, selectAllById
 }
