@@ -6,7 +6,7 @@ import { selectAllByRange } from '@/api/house';
 
 const {VITE_KAKAO_API_KEY} = import.meta.env;
 
-var map = ref(null);
+const map = ref(null);
 
 const kakaoStore = useKakaoStore();
 const houseStore = useHouseStore();
@@ -75,15 +75,32 @@ function dragendMap() {
 
 			// 마커를 생성합니다.
 			var marker = new window.kakao.maps.Marker({
-				position: markerPosition
+				position: markerPosition,
+				clickable: true
 			});
 
 			markers.value.push(marker);
 			marker.setMap(map.value);
+
+			// 마커에 클릭이벤트를 등록합니다
+			window.kakao.maps.event.addListener(marker, 'click', function() {
+				
+				panTo(house.lat, house.lng);
+				
+			});
 		})
 		
 	});
 }
+
+function panTo(lat, lng) {
+    // 이동할 위도 경도 위치를 생성합니다 
+    var moveLatLon = new kakao.maps.LatLng(lat, lng);
+    
+    // 지도 중심을 부드럽게 이동시킵니다
+    // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
+    map.value.panTo(moveLatLon);            
+}  
 
 </script>
 
