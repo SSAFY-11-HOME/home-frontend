@@ -43,18 +43,18 @@ export const useKakaoStore = defineStore('kakao', () => {
   const map = ref(null);
   const markers = ref([]);
 
-  function loadScript() {
+  function loadScript(router) {
     const script = document.createElement('script')
   
     // 동적 로딩을 위해서 autoload=false 추가
     script.src = `//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${VITE_KAKAO_API_KEY}`;
   
-    script.addEventListener('load', () => window.kakao.maps.load(loadMap()));
+    script.addEventListener('load', () => window.kakao.maps.load(loadMap(router)));
     document.head.appendChild(script);
   
   }
 
-  function loadMap() {
+  function loadMap(router) {
     window.kakao.maps.load(() => {
       const container = document.getElementById("map");
   
@@ -63,11 +63,11 @@ export const useKakaoStore = defineStore('kakao', () => {
         level: 3 //지도의 레벨(확대, 축소 정도)
       }
       map.value = new window.kakao.maps.Map(container, options);
-      dragendMap()
+      dragendMap(router)
     })
   }
 
-  function dragendMap() {
+  function dragendMap(router) {
 
     window.kakao.maps.event.addListener(map.value, 'dragend', function() {  
   
@@ -107,6 +107,7 @@ export const useKakaoStore = defineStore('kakao', () => {
         window.kakao.maps.event.addListener(marker, 'click', function() {
 
           panTo(house.lat, house.lng);
+          router.push({ name: 'navi-detail', params: {id: house.id} })
           
         });
       })
@@ -124,6 +125,6 @@ export const useKakaoStore = defineStore('kakao', () => {
       map.value.panTo(moveLatLon);            
   }
 
-  return { lat, lng, map, loadScript, loadMap, panTo, markers }
+  return { lat, lng, map, loadScript, loadMap, dragendMap, panTo, markers }
 
 })

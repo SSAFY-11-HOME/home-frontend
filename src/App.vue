@@ -4,14 +4,16 @@ import KakaoMap from '@/components/KakaoMap.vue';
 import { onMounted } from 'vue';
 
 import { useKakaoStore } from './stores/counter';
+import { useRouter } from 'vue-router';
 
 const kakaoStore = useKakaoStore();
+const router = useRouter();
 
 onMounted(() => {
 	if(window.kakao && window.kakao.maps) {
-		kakaoStore.loadMap();
+		kakaoStore.loadMap(router);
 	} else {
-		kakaoStore.loadScript();
+		kakaoStore.loadScript(router);
 	}
 })
 
