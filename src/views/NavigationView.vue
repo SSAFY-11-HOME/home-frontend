@@ -24,7 +24,6 @@ import NavigationSearch from "@/components/NavigationSearch.vue";
     <NavigationDivision/>
 
     <!-- 건물 정보 [ 이름, 층, 평, 가격, 거래일 ] 리스트 -->
-    <div id="list-title">📌 주변 실거래가 정보</div>
     <div id="house-list">
       <RouterView />
     </div>
@@ -127,15 +126,6 @@ import NavigationSearch from "@/components/NavigationSearch.vue";
 #container #house-list {
   height: 360px;
   overflow-y: scroll;
-}
-
-#container #list-title {
-  margin-left: 24px;
-  margin-top: 12px;
-  margin-bottom: 12px;
-  
-  font-size: 20px;
-  font-weight: bold;
 }
 
 #container #house-list::-webkit-scrollbar {
