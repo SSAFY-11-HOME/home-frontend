@@ -40,7 +40,7 @@ export const useKakaoStore = defineStore('kakao', () => {
 
   const lat = ref(37.501486255964835);
   const lng = ref(127.03780378177515);
-  const map = ref(null);
+  let map = null;
   const markers = ref([]);
 
   function loadScript(router) {
@@ -62,14 +62,17 @@ export const useKakaoStore = defineStore('kakao', () => {
         center: new window.kakao.maps.LatLng(lat.value, lng.value), //지도의 중심좌표.
         level: 3 //지도의 레벨(확대, 축소 정도)
       }
-      map.value = new window.kakao.maps.Map(container, options);
+      map = new window.kakao.maps.Map(container, options);
+
+      init(router);
+
       dragendMap(router)
     })
   }
 
   function dragendMap(router) {
 
-    window.kakao.maps.event.addListener(map.value, 'dragend', function() {  
+    window.kakao.maps.event.addListener(map, 'dragend', function() {  
   
       // 마커 지우기!!
       markers.value.forEach((marker) => {
@@ -77,7 +80,7 @@ export const useKakaoStore = defineStore('kakao', () => {
       })
       
       // 지도 중심좌표를 얻어옵니다 
-      var latlng = map.value.getCenter(); 
+      var latlng = map.getCenter(); 
       
       selectAllByRange(
         {lat: latlng.getLat(), lng: latlng.getLng()},
@@ -96,12 +99,12 @@ export const useKakaoStore = defineStore('kakao', () => {
   
         // 마커를 생성합니다.
         var marker = new window.kakao.maps.Marker({
+          map: map,
           position: markerPosition,
           clickable: true
         });
   
         markers.value.push(marker);
-        marker.setMap(map.value);
   
         // 마커에 클릭이벤트를 등록합니다
         window.kakao.maps.event.addListener(marker, 'click', function() {
@@ -118,11 +121,47 @@ export const useKakaoStore = defineStore('kakao', () => {
   function panTo(lat, lng) {
       // 이동할 위도 경도 위치를 생성합니다 
       var moveLatLon = new kakao.maps.LatLng(lat, lng);
-      
-      console.log(`[ panTo ] ${lat} , ${lng}로 이동`);
 
       // 지도 중심을 부드럽게 이동시킵니다
-      map.value.panTo(moveLatLon);            
+      map.panTo(moveLatLon);            
+  }
+
+  function init(router) {
+    // 지도 중심좌표를 얻어옵니다 
+    var latlng = map.getCenter(); 
+      
+    selectAllByRange(
+      {lat: latlng.getLat(), lng: latlng.getLng()},
+      ({data}) => {
+        houseStore.setHouses(data);
+      },
+      (error) => {
+        console.log(error);
+      }
+    )
+
+    // 건물 정보 update 이후, 마커 생성
+    houseStore.getHouses.forEach((house) => {
+      // 마커가 표시될 위치입니다 
+      var markerPosition  = new window.kakao.maps.LatLng(house.lat, house.lng);
+
+      // 마커를 생성합니다.
+      var marker = new window.kakao.maps.Marker({
+        map: map,
+        position: markerPosition,
+        clickable: true
+      });
+
+      markers.value.push(marker);
+
+      // 마커에 클릭이벤트를 등록합니다
+      window.kakao.maps.event.addListener(marker, 'click', function() {
+
+        panTo(house.lat, house.lng);
+        router.push({ name: 'navi-detail', params: {id: house.id} })
+        
+      });
+    })
   }
 
   return { lat, lng, map, loadScript, loadMap, dragendMap, panTo, markers }
