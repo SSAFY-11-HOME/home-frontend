@@ -1,14 +1,18 @@
 <script setup>
+
 import { defineProps } from 'vue';
+import { useKakaoStore } from '@/stores/counter';
 
 defineProps({
 	house: {},
 })
 
+const kakaoStore = useKakaoStore();
+
 </script>
 
 <template>
-	<router-link :to="{ name: 'navi-detail', params: {id: house.id} }" class="nav-bt">
+	<router-link :to="{ name: 'navi-detail', params: {id: house.id} }" class="nav-bt" @click="kakaoStore.panTo(house.lat, house.lng)">
 		<div id="house-simple-info-box">
 
 			<div>

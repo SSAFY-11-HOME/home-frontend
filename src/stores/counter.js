@@ -105,7 +105,7 @@ export const useKakaoStore = defineStore('kakao', () => {
   
         // 마커에 클릭이벤트를 등록합니다
         window.kakao.maps.event.addListener(marker, 'click', function() {
-          
+
           panTo(house.lat, house.lng);
           
         });
@@ -118,6 +118,8 @@ export const useKakaoStore = defineStore('kakao', () => {
       // 이동할 위도 경도 위치를 생성합니다 
       var moveLatLon = new kakao.maps.LatLng(lat, lng);
       
+      console.log(`[ panTo ] ${lat} , ${lng}로 이동`);
+
       // 지도 중심을 부드럽게 이동시킵니다
       map.value.panTo(moveLatLon);            
   }
