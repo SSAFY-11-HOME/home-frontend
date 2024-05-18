@@ -1,12 +1,23 @@
 <script setup>
 
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const searchWord = ref('');
+
+function getSearchList() {
+    router.push({name: 'navi-search', params: {searchWord: searchWord.value} })
+}
+
 </script>
 
 <template>
   <div id="search">
     <div id="logo">로고</div>
     <div id="search-box">
-        <input id="search-input" type="text" placeholder="아파트∙지역명으로 검색">
+        <input id="search-input" type="text" placeholder="아파트∙지역명으로 검색" v-model="searchWord" @keyup.enter="getSearchList">
         <img id="search-magnifier" src="@/assets/magnifier.png" alt="...">
     </div>
   </div>
