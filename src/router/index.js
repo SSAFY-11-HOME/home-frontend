@@ -29,12 +29,12 @@ const router = createRouter({
     {
       path: '/navi/villa',
       name: 'navi-villa',
-      component: NavigationOfficetelView
+      component: NavigationVillaView
     },
     {
       path: '/navi/officetel',
       name: 'navi-officetel',
-      component: NavigationVillaView
+      component: NavigationOfficetelView
     },
     {
       path: '/navi/house/detail/:id',
