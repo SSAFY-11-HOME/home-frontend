@@ -15,7 +15,7 @@
   margin-top: 12px;
   margin-bottom: 12px;
 
-  width: 420px;
+  width: 100%;
   height: 1px;
   background-color: #d7d7d7;
 

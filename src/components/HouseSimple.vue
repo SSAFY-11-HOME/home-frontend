@@ -1,26 +1,32 @@
 <script setup>
+
 import { defineProps } from 'vue';
+import { useKakaoStore } from '@/stores/counter';
 
 defineProps({
 	house: {},
 })
 
+const kakaoStore = useKakaoStore();
+
 </script>
 
 <template>
-	<div id="house-simple-info-box">
+	<router-link :to="{ name: 'navi-detail', params: {id: house.id} }" class="nav-bt" @click="kakaoStore.panTo(house.lat, house.lng)">
+		<div id="house-simple-info-box">
 
-		<div>
-			<div class="flex">
-				<div id="name">{{ house.name }}</div>
-				<div id="floor-area">#{{ house.floor }} #{{ house.area }}</div>
+			<div>
+				<div class="flex">
+					<div id="name">{{ house.name }}</div>
+					<div id="floor-area">#{{ house.floor }}층 #{{ house.parea }}평</div>
+				</div>
+				<div id="amount">{{ house.dealAmount }}만원</div>
 			</div>
-			<div id="amount">{{ house.dealAmount }}</div>
+
+			<div id="date">{{ house.dealDate }}</div>
+
 		</div>
-
-		<div id="date">{{ house.dealDate }}</div>
-
-	</div>
+	</router-link>
 
 </template>
 
@@ -81,6 +87,12 @@ defineProps({
 
 .flex {
 	display: flex;
+}
+
+a {
+	margin: 0; padding: 0;
+	text-decoration: none;
+	color: #3A1D1D;
 }
 
 

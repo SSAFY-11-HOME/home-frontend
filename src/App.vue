@@ -1,10 +1,28 @@
 <script setup>
-  import NavigationView from '@/views/NavigationView.vue';
+import NavigationView from '@/views/NavigationView.vue';
+import KakaoMap from '@/components/KakaoMap.vue';
+import { onMounted } from 'vue';
+
+import { useKakaoStore } from './stores/counter';
+import { useRouter } from 'vue-router';
+
+const kakaoStore = useKakaoStore();
+const router = useRouter();
+
+onMounted(() => {
+	if(window.kakao && window.kakao.maps) {
+		kakaoStore.loadMap(router);
+	} else {
+		kakaoStore.loadScript(router);
+	}
+})
+
 </script>
 
 <template>
   <div>
     <NavigationView/>
+    <KakaoMap/>
   </div>
 </template>
 

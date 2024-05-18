@@ -4,6 +4,7 @@ import NavigationAllView from '@/views/NavigationAllView.vue';
 import NavigationAptView from '@/views/NavigationAptView.vue';
 import NavigationOfficetelView from '@/views/NavigationOfficetelView.vue';
 import NavigationVillaView from '@/views/NavigationVillaView.vue';
+import NavigationDetailView from '@/views/NavigationDetailView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,6 +33,11 @@ const router = createRouter({
       path: '/navi/officetel',
       name: 'navi-officetel',
       component: NavigationVillaView
+    },
+    {
+      path: '/navi/house/detail/:id',
+      name: 'navi-detail',
+      component: NavigationDetailView
     },
     // {
     //   path: '/about',
