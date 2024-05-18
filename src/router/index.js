@@ -47,7 +47,7 @@ const router = createRouter({
       component: NavigationSearchView
     },
     {
-      path: '/navi/search/dong/:dongCode',
+      path: '/navi/search/dong',
       name: 'navi-search-dong',
       component: NavigationDongSearchView
     },
