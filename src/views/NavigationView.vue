@@ -25,7 +25,7 @@ import NavigationSearch from "@/components/NavigationSearch.vue";
 
     <!-- 건물 정보 [ 이름, 층, 평, 가격, 거래일 ] 리스트 -->
     <div id="house-list">
-      <RouterView :key="$route.fullPath"/>
+      <RouterView :key="$route.fullPath"/> <!-- :key="$route.fullPath" -->
     </div>
 
     <NavigationDivision/>

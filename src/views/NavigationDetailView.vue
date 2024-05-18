@@ -7,11 +7,12 @@ import NavigationDivision from '@/components/NavigationDivision.vue';
 import HouseDealListVue from '@/components/HouseDealList.vue';
 const route = useRoute();
 
-const houseInfo = ref(null);
+const houseInfo = ref({});
+
+console.log("detail view");
 
 selectAllById(route.params.id,
     ({data}) => {
-      console.log(data);
       houseInfo.value = data;
     },
     (error) => {
