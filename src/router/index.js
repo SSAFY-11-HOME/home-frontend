@@ -5,6 +5,8 @@ import NavigationAptView from '@/views/NavigationAptView.vue';
 import NavigationOfficetelView from '@/views/NavigationOfficetelView.vue';
 import NavigationVillaView from '@/views/NavigationVillaView.vue';
 import NavigationDetailView from '@/views/NavigationDetailView.vue';
+import NavigationSearchView from '@/views/NavigationSearchView.vue';
+import NavigationDongSearchView from '@/views/NavigationDongSearchView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +40,16 @@ const router = createRouter({
       path: '/navi/house/detail/:id',
       name: 'navi-detail',
       component: NavigationDetailView
+    },
+    {
+      path: '/navi/search/:searchWord',
+      name: 'navi-search',
+      component: NavigationSearchView
+    },
+    {
+      path: '/navi/search/dong/:dongCode',
+      name: 'navi-search-dong',
+      component: NavigationDongSearchView
     },
     // {
     //   path: '/about',
