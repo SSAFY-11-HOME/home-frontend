@@ -18,7 +18,7 @@ function getSearchList() {
     <div id="logo">로고</div>
     <div id="search-box">
         <input id="search-input" type="text" placeholder="아파트∙지역명으로 검색" v-model="searchWord" @keyup.enter="getSearchList">
-        <img id="search-magnifier" src="@/assets/magnifier.png" alt="...">
+        <img id="search-magnifier" src="@/assets/magnifier.png" alt="..." @click="getSearchList">
     </div>
   </div>
 </template>
@@ -58,6 +58,11 @@ function getSearchList() {
 
     border: 2px solid transparent; /* 초기에는 투명한 테두리 */
     transition: border-color 0.3s ease; /* 테두리 전환 효과 추가 */
+}
+
+#search #search-box:hover img {
+  opacity: 1.3;
+  transform: scale(1.25);
 }
 
 #search #search-box:focus-within {
