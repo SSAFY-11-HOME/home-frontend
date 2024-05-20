@@ -1,6 +1,7 @@
 <script setup>
 import NavigationView from '@/views/NavigationView.vue';
 import KakaoMap from '@/components/KakaoMap.vue';
+import LoginButton from '@/components/LoginButton.vue';
 import { onMounted } from 'vue';
 
 import { useKakaoStore } from './stores/counter';
@@ -21,6 +22,7 @@ onMounted(() => {
 
 <template>
   <div>
+	<LoginButton/>
     <NavigationView/>
     <KakaoMap/>
   </div>
