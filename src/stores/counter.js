@@ -33,6 +33,25 @@ export const useHouseStore = defineStore('house', () => {
 
 })
 
+export const useUserStore = defineStore('user', () => {
+
+  const jwt = ref('');
+
+  const isLogin = computed(() => {
+    return (jwt.value !== '');
+  });
+
+  function login(token) {
+    jwt.value = token;
+  }
+
+  function logout() {
+    jwt.value = '';
+  }
+
+  return { jwt, isLogin, login, logout };
+})
+
 
 export const useKakaoStore = defineStore('kakao', () => {
 
