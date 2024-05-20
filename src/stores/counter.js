@@ -86,47 +86,50 @@ export const useKakaoStore = defineStore('kakao', () => {
         {lat: latlng.getLat(), lng: latlng.getLng()},
         ({data}) => {
           houseStore.setHouses(data);
+
+          // 건물 정보 update 이후, 마커 생성
+          houseStore.getHouses.forEach((house) => {
+            // 마커가 표시될 위치입니다 
+            var markerPosition  = new window.kakao.maps.LatLng(house.lat, house.lng);
+      
+            // 마커를 생성합니다.
+            var marker = new window.kakao.maps.Marker({
+              map: map,
+              position: markerPosition,
+              clickable: true
+            });
+      
+            markers.value.push(marker);
+      
+            // 마커에 클릭이벤트를 등록합니다
+            window.kakao.maps.event.addListener(marker, 'click', function() {
+
+              panTo(house.lat, house.lng);
+              router.push({ name: 'navi-detail', params: {id: house.id} })
+              
+            });
+          })
         },
         (error) => {
           console.log(error);
         }
       )
-  
-      // 건물 정보 update 이후, 마커 생성
-      houseStore.getHouses.forEach((house) => {
-        // 마커가 표시될 위치입니다 
-        var markerPosition  = new window.kakao.maps.LatLng(house.lat, house.lng);
-  
-        // 마커를 생성합니다.
-        var marker = new window.kakao.maps.Marker({
-          map: map,
-          position: markerPosition,
-          clickable: true
-        });
-  
-        markers.value.push(marker);
-  
-        // 마커에 클릭이벤트를 등록합니다
-        window.kakao.maps.event.addListener(marker, 'click', function() {
-
-          panTo(house.lat, house.lng);
-          router.push({ name: 'navi-detail', params: {id: house.id} })
-          
-        });
-      })
       
     });
   }
   
   function panTo(lat, lng) {
       // 이동할 위도 경도 위치를 생성합니다 
-      var moveLatLon = new kakao.maps.LatLng(lat, lng);
+      var moveLatLon = new window.kakao.maps.LatLng(lat, lng);
 
       // 지도 중심을 부드럽게 이동시킵니다
       map.panTo(moveLatLon);            
   }
 
   function init(router) {
+
+    console.log("init");
+
     // 지도 중심좌표를 얻어옵니다 
     var latlng = map.getCenter(); 
       
@@ -134,36 +137,39 @@ export const useKakaoStore = defineStore('kakao', () => {
       {lat: latlng.getLat(), lng: latlng.getLng()},
       ({data}) => {
         houseStore.setHouses(data);
+
+        // 건물 정보 update 이후, 마커 생성
+        houseStore.getHouses.forEach((house) => {
+          // 마커가 표시될 위치입니다 
+          var markerPosition  = new window.kakao.maps.LatLng(house.lat, house.lng);
+
+          // 마커를 생성합니다.
+          var marker = new window.kakao.maps.Marker({
+            map: map,
+            position: markerPosition,
+            clickable: true
+          });
+
+          // 마커에 클릭이벤트를 등록합니다
+          window.kakao.maps.event.addListener(marker, 'click', function() {
+
+            panTo(house.lat, house.lng);
+            router.push({ name: 'navi-detail', params: {id: house.id} })
+            
+          });
+
+          markers.value.push(marker);
+
+        })
+
       },
       (error) => {
         console.log(error);
       }
     )
 
-    // 건물 정보 update 이후, 마커 생성
-    houseStore.getHouses.forEach((house) => {
-      // 마커가 표시될 위치입니다 
-      var markerPosition  = new window.kakao.maps.LatLng(house.lat, house.lng);
-
-      // 마커를 생성합니다.
-      var marker = new window.kakao.maps.Marker({
-        map: map,
-        position: markerPosition,
-        clickable: true
-      });
-
-      markers.value.push(marker);
-
-      // 마커에 클릭이벤트를 등록합니다
-      window.kakao.maps.event.addListener(marker, 'click', function() {
-
-        panTo(house.lat, house.lng);
-        router.push({ name: 'navi-detail', params: {id: house.id} })
-        
-      });
-    })
   }
 
-  return { lat, lng, map, loadScript, loadMap, dragendMap, panTo, markers }
+  return { lat, lng, map, loadScript, loadMap, dragendMap, panTo, init, markers }
 
 })
