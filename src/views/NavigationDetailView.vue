@@ -1,11 +1,12 @@
 <script setup>
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { selectAllById } from '@/api/house';
 import { ref } from 'vue';
 
 import NavigationDivision from '@/components/NavigationDivision.vue';
 import HouseDealListVue from '@/components/HouseDealList.vue';
 const route = useRoute();
+const router = useRouter();
 
 const houseInfo = ref({});
 
@@ -24,13 +25,23 @@ selectAllById(route.params.id,
 
 <template>
   <div>
-    <div id="apt-name">🏠 {{ houseInfo.apartmentName }}</div>
+
+    <NavigationDivision/>
+
+    <div id="search">
+      <div id="backspace" @click="router.go(-1)">
+        <img src="@/assets/back.png" alt="">
+      </div>
+      <div id="apt-name">
+        🏠 {{ houseInfo.apartmentName }}
+      </div>
+    </div>
 
     <NavigationDivision/>
 
     <div id="apt-address">{{ houseInfo.base + " " + houseInfo.jibun + " " + houseInfo.road }}</div>
     
-    <hr>
+    <NavigationDivision/>
     
     <div id="list-title">📈 실거래가 정보</div>
 
@@ -40,6 +51,29 @@ selectAllById(route.params.id,
 </template>
 
 <style scoped>
+
+#search {
+  display: flex;
+  width: 420px; height: 40px;
+
+  line-height: 40px;
+}
+
+#search #backspace {
+  width: 24px; height: 24px;
+  margin-left: 16px; margin-right: 16px;
+}
+
+#search #backspace img {
+  widows: 100%; height: 100%;
+}
+
+#search #apt-name {
+  width: 340px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+}
 
 #apt-name {
   text-align: center;
