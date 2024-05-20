@@ -15,7 +15,7 @@ function getSearchList() {
 
 <template>
   <div id="search">
-    <div id="logo">로고</div>
+    <img src="@/assets/logo.png" alt="logo" id="logo">
     <div id="search-box">
         <input id="search-input" type="text" placeholder="아파트∙지역명으로 검색" v-model="searchWord" @keyup.enter="getSearchList">
         <img id="search-magnifier" src="@/assets/magnifier.png" alt="..." @click="getSearchList">
@@ -30,16 +30,10 @@ function getSearchList() {
 }
 
 #search #logo {
-    /* DELETE */
-    text-align: center;
-    line-height: 40px;
 
     width: 40px; height: 40px;
 
     margin-top: 12px; margin-left: 12px;
-
-    background-color: #F7E600;
-    color: #3A1D1D;
 }
 
 #search #search-box {

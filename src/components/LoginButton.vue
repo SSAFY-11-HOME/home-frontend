@@ -24,7 +24,7 @@ function openModal() {
 			</div> -->
 			
 			<div id="header">
-				<img src="" alt="logo" id="logo">
+				<img src="@/assets/logo.png" alt="logo" id="logo">
 				<div id="title">로그인</div>
 			</div>
 
@@ -99,7 +99,7 @@ function openModal() {
 }
 
 .modal-container #header {
-	width: 510px;
+	width: 470px;
 
 	display: flex;
 	justify-content: center;
@@ -168,6 +168,11 @@ function openModal() {
 	color: #3A1D1D;
 	font-weight: bold;
 	cursor: pointer;
+}
+
+#logo {
+	width: 40px; height: 40px;
+	margin: 8px;
 }
 
 </style>
