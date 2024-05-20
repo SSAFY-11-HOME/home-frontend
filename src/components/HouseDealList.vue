@@ -51,12 +51,12 @@ function processNumber(numberString) {
 <style scoped>
 
 #deal-list {
-  width: 372px; height: 320px;
+  width: 372px; height: 600px;
 
   margin-left: 24px; margin-top: 12px;
   border-radius: 8px;
 
-  /* background-color: red; */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }
 
 #deal-list #header {
@@ -82,10 +82,28 @@ function processNumber(numberString) {
 
 #deal-list #body {
 
-  width: 372px; height: 32px;
+  width: 372px; height: 560px;
 
   text-align: center;
   line-height: 32px;
+
+  overflow-y: scroll;
+}
+
+#deal-list #body::-webkit-scrollbar {
+  width: 3px;
+  /* display: none; */
+}
+
+#deal-list #body::-webkit-scrollbar-thumb {
+  background-color: #c9c9c9;
+  border-radius: 10px;
+}
+
+#deal-list #body::-webkit-scrollbar-track {
+  background-color: #e0e0e0;
+  border-radius: 10px;
+  box-shadow: inset 0px 0px 5px white;
 }
 
 #deal-list #body .tdate {
