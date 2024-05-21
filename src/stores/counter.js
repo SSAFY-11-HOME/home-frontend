@@ -113,9 +113,18 @@ export const useKakaoStore = defineStore('kakao', () => {
           houseStore.getHouses.forEach((house) => {
             // 마커가 표시될 위치입니다 
             var markerPosition  = new window.kakao.maps.LatLng(house.lat, house.lng);
+
+            // var imageSrc = 'https://picsum.photos/64/64', // 마커이미지의 주소입니다    
+            var imageSrc = '../../../src/assets/logo.png'
+            var imageSize = new window.kakao.maps.Size(64, 69) // 마커이미지의 크기입니다
+            var imageOption = {offset: new window.kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+              
+            // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+            var markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize, imageOption)
       
             // 마커를 생성합니다.
             var marker = new window.kakao.maps.Marker({
+              image: markerImage,
               map: map,
               position: markerPosition,
               clickable: true
