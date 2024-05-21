@@ -3,10 +3,14 @@ import { useRoute, useRouter } from 'vue-router';
 import { selectAllById } from '@/api/house';
 import { ref } from 'vue';
 
+import { useKakaoStore } from '@/stores/counter';
+
 import NavigationDivision from '@/components/NavigationDivision.vue';
 import HouseDealListVue from '@/components/HouseDealList.vue';
+
 const route = useRoute();
 const router = useRouter();
+const kakaoStore = useKakaoStore();
 
 const houseInfo = ref({});
 
@@ -15,6 +19,7 @@ console.log("detail view");
 selectAllById(route.params.id,
     ({data}) => {
       houseInfo.value = data;
+      kakaoStore.addressSearch(houseInfo.value.base + " " + houseInfo.value.jibun + " " + houseInfo.value.road);
     },
     (error) => {
         console.log(error);

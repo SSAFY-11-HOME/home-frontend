@@ -33,6 +33,28 @@ export const useHouseStore = defineStore('house', () => {
 
 })
 
+export const useUserStore = defineStore('user', () => {
+
+  const jwt = ref(window.localStorage.getItem('JWT'));
+
+  const isLogin = computed(() => {
+    return (jwt.value !== 'null');
+  });
+
+  function login(token) {
+    jwt.value = token;
+    window.localStorage.setItem('JWT', token);
+  }
+
+  function logout() {
+    jwt.value = 'null';
+    window.localStorage.setItem('JWT', 'null');
+  }
+
+  return { jwt, isLogin, login, logout };
+
+})
+
 
 export const useKakaoStore = defineStore('kakao', () => {
 
@@ -47,7 +69,7 @@ export const useKakaoStore = defineStore('kakao', () => {
     const script = document.createElement('script')
   
     // 동적 로딩을 위해서 autoload=false 추가
-    script.src = `//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${VITE_KAKAO_API_KEY}`;
+    script.src = `//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${VITE_KAKAO_API_KEY}&libraries=services`;
   
     script.addEventListener('load', () => window.kakao.maps.load(loadMap(router)));
     document.head.appendChild(script);
@@ -126,6 +148,24 @@ export const useKakaoStore = defineStore('kakao', () => {
       map.panTo(moveLatLon);            
   }
 
+  function addressSearch(address) {
+    // 주소-좌표 변환 객체를 생성합니다
+    var geocoder = new window.kakao.maps.services.Geocoder();
+
+    // 주소로 좌표를 검색합니다
+    geocoder.addressSearch(address, function(result, status) {
+
+      // 정상적으로 검색이 완료됐으면 
+      if (status === window.kakao.maps.services.Status.OK) {
+
+          var coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
+
+          // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+          map.panTo(coords);
+      } 
+    });
+  }
+
   function init(router) {
 
     console.log("init");
@@ -170,6 +210,6 @@ export const useKakaoStore = defineStore('kakao', () => {
 
   }
 
-  return { lat, lng, map, loadScript, loadMap, dragendMap, panTo, init, markers }
+  return { lat, lng, map, loadScript, loadMap, dragendMap, panTo, addressSearch, init, markers }
 
 })
