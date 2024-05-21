@@ -14,6 +14,7 @@ const pw = ref('');
 const checkPw = ref('');
 const name = ref('');
 const email = ref('');
+const isBroker = ref(false);
 
 function openModal() {
 	modalCheck.value = !modalCheck.value;
@@ -29,12 +30,13 @@ function login() {
 }
 
 function userJoin() {
+
 	if(pw.value !== checkPw.value) {
 		alert("비밀번호를 확인해 주세요.")
 		return;
 	}
 
-	join({ id: id.value, pw: pw.value, name: name.value, email: email.value , isBroker: false},
+	join({ id: id.value, pw: pw.value, name: name.value, email: email.value , isBroker: isBroker.value},
 		({data}) => {
 			console.log(data);
 		},
@@ -104,6 +106,11 @@ function userJoin() {
 
 				<div>
 					<input type="text" class="input-box" placeholder="이메일" v-model="email">
+				</div>
+
+				<div class="check-box">
+					<input type="checkbox" name="isBroker" v-model="isBroker">
+					당신은 중계업자입니까?
 				</div>
 				
 				<button id="login-button" @click="userJoin">회원가입</button>
@@ -199,6 +206,14 @@ function userJoin() {
 	padding-left: 12px; padding-top: 4px; padding-bottom: 4px;
 
 	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+.check-box {
+	margin-bottom: 8px;
+}
+
+.check-box * {
+	margin: 4px;
 }
 
 #login-button {
