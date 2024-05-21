@@ -160,12 +160,6 @@ export const useKakaoStore = defineStore('kakao', () => {
 
           var coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
 
-          // 결과값으로 받은 위치를 마커로 표시합니다
-          var marker = new window.kakao.maps.Marker({
-              map: map,
-              position: coords
-          });
-
           // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
           map.panTo(coords);
       } 
