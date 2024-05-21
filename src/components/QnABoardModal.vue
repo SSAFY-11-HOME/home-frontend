@@ -1,13 +1,28 @@
 <script setup>
 
 import { ref } from 'vue';
+import { selectAll } from '@/api/qna';
 
 const modalCheck = ref(false);
 const writeCheck = ref(false);
+const qnaList = ref([])
 
 function openModal() {
 	modalCheck.value = !modalCheck.value;
 }
+
+function convertDate(date) {
+	return date.split(" ")[0];
+}
+
+selectAll(
+	({data}) => {
+		qnaList.value = data;
+	},
+	(error) => {
+		console.log(error);
+	}
+)
 
 </script>
 
@@ -33,13 +48,15 @@ function openModal() {
 					<div class="content-head">
 						<div class="content-id">번호</div>
 						<div class="content-title">제목</div>
+						<div class="content-author">작성자</div>
 						<div class="content-date">날짜</div>
 					</div>
 
-					<div class="content">
-						<div class="content-id">id</div>
-						<div class="content-title">title</div>
-						<div class="content-date">date</div>
+					<div class="content" v-for="(qna) in qnaList" :key="qna.articleId">
+						<div class="content-id">{{qna.articleId}}</div>
+						<div class="content-title">{{ qna.title }}</div>
+						<div class="content-author">{{ qna.id }}</div>
+						<div class="content-date">{{ convertDate(qna.date) }}</div>
 					</div>
 
 				</div>
@@ -125,6 +142,25 @@ function openModal() {
 	height: 560px;
 
 	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+.modal-container #body::-webkit-scrollbar {
+  width: 3px;
+  /* display: none; */
+}
+
+.modal-container #body::-webkit-scrollbar-thumb {
+  background-color: #c9c9c9;
+  border-radius: 10px;
+}
+
+.modal-container #body::-webkit-scrollbar-track {
+  background-color: #e0e0e0;
+  border-radius: 10px;
+  box-shadow: inset 0px 0px 5px white;
 }
 
 .modal-container #header #title {
@@ -148,28 +184,35 @@ function openModal() {
 	font-weight: bold;
 }
 
+#body .content-head .content-author {
+	font-weight: bold;
+}
+
 #body .content-head .content-date {
 	font-weight: bold;
 }
 
 .content-id {
-	width: 140px;
+	width: 40px;
 	margin: 12px;
 }
 
 .content-title {
-	width: 320px;
+	width: 200px;
+	margin: 12px;
+}
+
+.content-author {
+	width: 160px;
 	margin: 12px;
 }
 
 .content-date {
-	width: 140px;
+	width: 160px;
 	margin: 12px;
 }
 
 #body .content {
-	/* border: solid black 1px; */
-
 	width: 560px;
 	display: flex;
 }
