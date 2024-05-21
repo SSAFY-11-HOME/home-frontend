@@ -2,13 +2,46 @@
 
 import { ref } from 'vue';
 import { useUserStore } from '@/stores/counter';
+import { join } from '@/api/user';
 
 const userStore = useUserStore();
 
 const modalCheck = ref(false);
+const pageCheck = ref(false);
+
+const id = ref('');
+const pw = ref('');
+const checkPw = ref('');
+const name = ref('');
+const email = ref('');
 
 function openModal() {
 	modalCheck.value = !modalCheck.value;
+}
+
+function changePage() {
+	pageCheck.value = !pageCheck.value;
+}
+
+function login() {
+	userStore.login('json web token');
+	openModal();
+}
+
+function userJoin() {
+	if(pw.value !== checkPw.value) {
+		alert("비밀번호를 확인해 주세요.")
+		return;
+	}
+
+	join({ id: id.value, pw: pw.value, name: name.value, email: email.value , isBroker: false},
+		({data}) => {
+			console.log(data);
+		},
+		(error) => {
+			console.log(error);
+		}
+	)
 }
 
 </script>
@@ -16,37 +49,71 @@ function openModal() {
 <template>
 	<div id="box">
 		<button class="button" @click="openModal" v-if="!userStore.isLogin">로그인</button>
-		<button class="button" @click="openModal" v-if="userStore.isLogin">정  보</button>
+		<button class="button" @click="openModal" v-if="userStore.isLogin">사용자</button>
 	</div>
 
 	<div class="modal-wrap" v-show="modalCheck" @click="openModal">
 		<div class="modal-container" @click="openModal">
 
-			<!-- <div id="close-button">
-				<img src="" alt="">
-			</div> -->
+			<!-- 로그인 페이지 -->
+			<div v-if="pageCheck">
+				<div id="header">
+					<img src="@/assets/logo.png" alt="logo" id="logo">
+					<div id="title">로그인</div>
+				</div>
+
+				<div>
+					<input type="text" class="input-box" placeholder="아이디" v-model="id">
+				</div>
+
+				<div>
+					<input type="password" class="input-box" placeholder="비밀번호" v-model="pw">
+				</div>
+				
+				<button id="login-button" @click="login">로그인</button>
+
+
+				<div id="join-tab">
+					<div class="normal-text">아직 회원이 아니신가요?</div>
+					<div @click="changePage" id="join-button">회원가입</div>
+				</div>
+			</div>
 			
-			<div id="header">
-				<img src="@/assets/logo.png" alt="logo" id="logo">
-				<div id="title">로그인</div>
-			</div>
+			<!-- 회원가입 페이지 -->
+			<div v-if="!pageCheck">
+				<div id="header">
+					<img src="@/assets/logo.png" alt="logo" id="logo">
+					<div id="title">회원가입</div>
+				</div>
 
-			<div>
-				<input type="text" class="input-box" placeholder="아이디">
-			</div>
+				<div>
+					<input type="text" class="input-box" placeholder="아이디" v-model="id">
+				</div>
 
-			<div>
-				<input type="password" class="input-box" placeholder="비밀번호">
-			</div>
-			
-			<button id="login-button">로그인</button>
+				<div>
+					<input type="password" class="input-box" placeholder="비밀번호" v-model="pw">
+				</div>
+
+				<div>
+					<input type="password" class="input-box" placeholder="비밀번호 확인" v-model="checkPw">
+				</div>
+
+				<div>
+					<input type="text" class="input-box" placeholder="이름" v-model="name">
+				</div>
+
+				<div>
+					<input type="text" class="input-box" placeholder="이메일" v-model="email">
+				</div>
+				
+				<button id="login-button" @click="userJoin">회원가입</button>
 
 
-			<div id="join-tab">
-				<div class="normal-text">아직 회원이 아니신가요?</div>
-				<div @click="openModal" id="join-button">회원가입</div>
+				<div id="join-tab">
+					<div class="normal-text">이미 계정이 있으신가요?</div>
+					<div @click="changePage" id="join-button">로그인</div>
+				</div>
 			</div>
-			
 			
 		</div>
 	</div>

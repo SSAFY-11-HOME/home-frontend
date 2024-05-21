@@ -1,6 +1,12 @@
 import myaxios from "@/utils/axios-common.js"
 
-function login(param, success, fail) {
+// function login(param, success, fail) {
+// 	myaxios.post(`/user`, param)
+// 	.then(success)
+// 	.catch(fail);
+// }
+
+function join(param, success, fail) {
 	myaxios.post(`/user`, param)
 	.then(success)
 	.catch(fail);
@@ -25,5 +31,5 @@ function getAllUser(success, fail) {
 }
 
 export {
-	login, updateProfile, remove, getAllUser
+	updateProfile, remove, getAllUser, join	
 }
