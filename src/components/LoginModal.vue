@@ -1,19 +1,22 @@
 <script setup>
 
-import {ref} from 'vue';
+import { ref } from 'vue';
+import { useUserStore } from '@/stores/counter';
+
+const userStore = useUserStore();
 
 const modalCheck = ref(false);
 
 function openModal() {
 	modalCheck.value = !modalCheck.value;
-	console.log(modalCheck.value);
 }
 
 </script>
 
 <template>
 	<div id="box">
-		<button id="login-button" @click="openModal">로그인</button>
+		<button class="button" @click="openModal" v-if="!userStore.isLogin">로그인</button>
+		<button class="button" @click="openModal" v-if="userStore.isLogin">정  보</button>
 	</div>
 
 	<div class="modal-wrap" v-show="modalCheck" @click="openModal">
@@ -59,7 +62,7 @@ function openModal() {
 	right: 32px;
 }
 
-#box #login-button {
+#box .button {
 	width: 96px; height: 32px;
 	border-radius: 8px; border: none;
 

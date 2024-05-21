@@ -35,21 +35,24 @@ export const useHouseStore = defineStore('house', () => {
 
 export const useUserStore = defineStore('user', () => {
 
-  const jwt = ref('');
+  const jwt = ref(window.localStorage.getItem('JWT'));
 
   const isLogin = computed(() => {
-    return (jwt.value !== '');
+    return (jwt.value !== 'null');
   });
 
   function login(token) {
     jwt.value = token;
+    window.localStorage.setItem('JWT', token);
   }
 
   function logout() {
-    jwt.value = '';
+    jwt.value = 'null';
+    window.localStorage.setItem('JWT', 'null');
   }
 
   return { jwt, isLogin, login, logout };
+
 })
 
 
