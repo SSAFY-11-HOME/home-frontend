@@ -34,15 +34,19 @@ function modifyArticleById(param, success, fail) {
 }
 
 function createComment(param, success, fail) {
-
-	console.log(param);
-
 	myaxios.defaults.headers["Authorization"] = window.localStorage.getItem("JWT");
 	myaxios.post(`/qboard/comment`, param)
 	.then(success)
 	.catch(fail);
 }
 
+function deleteComment(param, success, fail) {
+	myaxios.defaults.headers["Authorization"] = window.localStorage.getItem("JWT");
+	myaxios.delete(`/qboard/comment`, {data : param})
+	.then(success)
+	.catch(fail);
+}
+
 export {
-    selectAll, createArticle, selectArticleById, deleteArticleById, modifyArticleById, createComment
+    selectAll, createArticle, selectArticleById, deleteArticleById, modifyArticleById, createComment, deleteComment
 }

@@ -1,7 +1,7 @@
 <script setup>
 
 import { ref, watch } from 'vue';
-import { selectAll, createArticle, selectArticleById, deleteArticleById, modifyArticleById, createComment } from '@/api/qna';
+import { selectAll, createArticle, selectArticleById, deleteArticleById, modifyArticleById, createComment, deleteComment } from '@/api/qna';
 import { useUserStore } from '@/stores/counter';
 
 
@@ -96,6 +96,20 @@ function registerComment() {
 	({data}) => {}, (error) => {});
 
 	selectArticleById(viewStatus.value,
+		({data}) => {
+			comments.value = data.comments;
+		},
+		(error) => {
+			console.log(error);
+		})
+}
+
+function reomveComment(commentId) {
+	deleteComment({commentId: commentId, articleId: articleId.value, id: userStore.getUserId},
+		({data}) => {console.log(data);},
+		(error) => {console.log(error);})
+	
+		selectArticleById(viewStatus.value,
 		({data}) => {
 			comments.value = data.comments;
 		},
@@ -226,6 +240,7 @@ selectAll(
 								<div class="comment-id">{{ comment.id }}</div>
 								<div class="comment-contents">{{ comment.contents }}</div>
 								<div class="comment-date">{{ convertDate(comment.date) }}</div>
+								<div class="comment-delete" v-if="userStore.getUserId === comment.id" @click="reomveComment(comment.id)">X</div>
 							</div>
 						</div>
 
@@ -248,6 +263,15 @@ selectAll(
 .bold-18 { font-weight: bold; font-size: 18px; }
 .font-weight-bold { font-weight: bold; }
 .margin-bottom-8 {margin-bottom: 8px;}
+
+.comment-delete {
+	width: 24px; height: 24px;
+	margin-left: 8px;
+	text-align: center;
+	background-color: red;
+
+	border-radius: 8px;
+}
 
 .comment-wrap {
 	margin-left: 16px
@@ -292,7 +316,7 @@ selectAll(
 }
 
 .comment-contents {
-	width: 320px;
+	width: 280px;
 }
 
 .comment-date {
