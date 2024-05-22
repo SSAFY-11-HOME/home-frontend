@@ -41,6 +41,7 @@ function createComment(param, success, fail) {
 }
 
 function deleteComment(param, success, fail) {
+	console.log(param);
 	myaxios.defaults.headers["Authorization"] = window.localStorage.getItem("JWT");
 	myaxios.delete(`/qboard/comment`, {data : param})
 	.then(success)

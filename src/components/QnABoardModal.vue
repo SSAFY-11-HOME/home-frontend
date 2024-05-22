@@ -240,7 +240,7 @@ selectAll(
 								<div class="comment-id">{{ comment.id }}</div>
 								<div class="comment-contents">{{ comment.contents }}</div>
 								<div class="comment-date">{{ convertDate(comment.date) }}</div>
-								<div class="comment-delete" v-if="userStore.getUserId === comment.id" @click="reomveComment(comment.id)">X</div>
+								<div class="comment-delete" v-if="userStore.getUserId === comment.id" @click="reomveComment(comment.commentId)">X</div>
 							</div>
 						</div>
 
