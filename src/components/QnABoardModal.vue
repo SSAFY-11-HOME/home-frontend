@@ -95,7 +95,7 @@ function registerComment() {
 	createComment({articleId: articleId.value, id: userStore.getUserId, contents: comment.value},
 	({data}) => {}, (error) => {});
 
-	selectArticleById(viewStatus,
+	selectArticleById(viewStatus.value,
 		({data}) => {
 			comments.value = data.comments;
 		},
