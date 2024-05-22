@@ -1,6 +1,6 @@
 <script setup>
 
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { selectAll, createArticle } from '@/api/qna';
 import { useUserStore } from '@/stores/counter';
 
@@ -13,6 +13,14 @@ const viewStatus = ref('QNA');
 const qnaList = ref([])
 
 const userStore = useUserStore();
+
+function truncateString(str) {
+	if (str.length > 10) {
+		return str.substring(0, 9) + '..';
+	} else {
+		return str;
+	}
+}
 
 function openModal() {
 	modalCheck.value = !modalCheck.value;
@@ -31,11 +39,28 @@ function create() {
 	(error) => {
 		console.log(error);
 	})
+
+	changeViewStatus("QNA")
 }
 
 function convertDate(date) {
 	return date.split(" ")[0];
 }
+
+// [TODO] viewStatus가 "QNA" 상태일 경우 API 요청을 통해 qnaList 데이터를 갱신
+// [TODO] 개인 페이지...
+
+watch(viewStatus, (newValue, oldValue) => {
+	if(newValue !== "QNA") return;
+	selectAll(
+		({data}) => {
+			qnaList.value = data;
+		},
+		(error) => {
+			console.log(error);
+		}
+	)
+})
 
 selectAll(
 	({data}) => {
@@ -45,6 +70,7 @@ selectAll(
 		console.log(error);
 	}
 )
+
 
 </script>
 
@@ -77,7 +103,7 @@ selectAll(
 
 					<div class="content" v-for="(qna) in qnaList" :key="qna.articleId" @click="changeViewStatus(qna.articleId)">
 						<div class="content-id">{{qna.articleId}}</div>
-						<div class="content-title">{{ qna.title }}</div>
+						<div class="content-title">{{ truncateString(qna.title) }}</div>
 						<div class="content-author">{{ qna.id }}</div>
 						<div class="content-date">{{ convertDate(qna.date) }}</div>
 					</div>
