@@ -63,7 +63,7 @@ export const useKakaoStore = defineStore('kakao', () => {
   const lat = ref(37.501486255964835);
   const lng = ref(127.03780378177515);
   let map = null;
-  const markers = ref([]);
+  const markers = [];
 
   function loadScript(router) {
     const script = document.createElement('script')
@@ -95,24 +95,18 @@ export const useKakaoStore = defineStore('kakao', () => {
   function dragendMap(router) {
 
     window.kakao.maps.event.addListener(map, 'dragend', function() {  
-  
+
       // 마커 지우기!!
-      markers.value.forEach((marker) => {
-        marker.setMap(null);
-      })
+      for(let i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
+      }
       
       // 지도의 영역을 반환
       var latlng = map.getBounds();
-
-      console.log(latlng.qa);
-      console.log(latlng.pa);
-      console.log(latlng.ha);
-      console.log(latlng.oa);
       
       selectAllByRange(
         {lat1: latlng.qa, lat2: latlng.pa, lng1: latlng.ha, lng2: latlng.oa},
         ({data}) => {
-          console.log(data);
           houseStore.setHouses(data);
 
           // 건물 정보 update 이후, 마커 생성
@@ -136,7 +130,7 @@ export const useKakaoStore = defineStore('kakao', () => {
               clickable: true
             });
       
-            markers.value.push(marker);
+            markers.push(marker);
       
             // 마커에 클릭이벤트를 등록합니다
             window.kakao.maps.event.addListener(marker, 'click', function() {
