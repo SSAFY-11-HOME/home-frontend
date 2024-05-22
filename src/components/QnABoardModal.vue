@@ -6,7 +6,7 @@ import { useUserStore } from '@/stores/counter';
 
 
 
-const modalCheck = ref(true);
+const modalCheck = ref(false);
 const viewStatus = ref('QNA');	
 const qnaList = ref([])
 
@@ -93,11 +93,12 @@ watch(viewStatus, (newValue, oldValue) => {
 
 function registerComment() {
 	createComment({articleId: articleId.value, id: userStore.getUserId, contents: comment.value},
-	({data}) => {}, (error) => {});
+	({data}) => {console.log(data);}, (error) => {});
 
 	selectArticleById(viewStatus.value,
 		({data}) => {
 			comments.value = data.comments;
+			console.log(comments.value);
 		},
 		(error) => {
 			console.log(error);
@@ -112,6 +113,7 @@ function reomveComment(commentId) {
 		selectArticleById(viewStatus.value,
 		({data}) => {
 			comments.value = data.comments;
+			console.log(comments.value);
 		},
 		(error) => {
 			console.log(error);
