@@ -19,27 +19,11 @@ const title = ref('');
 const content = ref('');
 const count = ref('');
 
-// const 
-
 const comments = ref('');
-
-/*
-"current": {
-	"articleId": 17,
-	"id": "ssafy",
-	"date": "2024-05-22 02:51:45",
-	"title": "siuuuu",
-	"contents": "siuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu",
-	"count": 2
-},
-*/
+const comment = ref('');
 
 function truncateString(str) {
-	if (str.length > 10) {
-		return str.substring(0, 9) + '..';
-	} else {
-		return str;
-	}
+	return (str.length > 10) ? str.substring(0, 9) + '..' : str;
 }
 
 function openModal() {
@@ -47,57 +31,34 @@ function openModal() {
 }
 
 function changeViewStatus(status) {
-
 	if(status === "WRITE") {
 		title.value = '';
 		content.value = '';
 	}
-
 	viewStatus.value = status;
 }
 
 function create() {
-
-	createArticle({title: title.value, contents: content.value},
-	({data}) => {
-		console.log(data);
-	},
-	(error) => {
-		console.log(error);
-	})
-
+	createArticle({title: title.value, contents: content.value}, ({data}) => {}, (error) => {})
 	changeViewStatus("QNA")
 }
 
 // id, articleId, title, contents
 function articleModify() {
 	modifyArticleById({id: userId.value, articleId: articleId.value, title: title.value, contents: content.value},
-	({data}) => {
-		console.log(data);
-	},
-	(error) => {
-		console.log(error);
-	})
+	({data}) => {}, (error) => {})
 	changeViewStatus('QNA')
 }
 
 function articleDelete() {
 	deleteArticleById({id: userId.value, articleId: articleId.value},
-	({data}) => {
-		console.log(data);
-	},
-	(error) => {
-		console.log(error);
-	})
+	({data}) => {}, (error) => {})
 	changeViewStatus('QNA')
 }
 
 function convertDate(date) {
 	return date.split(" ")[0];
 }
-
-// [TODO] viewStatus가 "QNA" 상태일 경우 API 요청을 통해 qnaList 데이터를 갱신
-// [TODO] 개인 페이지...
 
 watch(viewStatus, (newValue, oldValue) => {
 	if(newValue === "QNA") {
@@ -129,17 +90,6 @@ watch(viewStatus, (newValue, oldValue) => {
 	}
 	
 })
-
-/*
-"current": {
-	"articleId": 17,
-	"id": "ssafy",
-	"date": "2024-05-22 02:51:45",
-	"title": "siuuuu",
-	"contents": "siuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu",
-	"count": 2
-},
-*/
 
 selectAll(
 	({data}) => {
@@ -251,17 +201,21 @@ selectAll(
 
 					<!-- 답글 -->
 					<div class="comment-wrap">
-						<div v-for="(comment) in comments" :key="comment.commentId">
-							
-							<div class="display-flex">
-								<div>{{ comment.id }}</div>
-								<div>{{ comment.contents }}</div>
-								<div>{{comment.date}}</div>
-							</div>
 
-
-
+						<div class="display-flex margin-bottom-8">
+							<div class="bold-18 comment-id ">{{ userId }}</div>
+							<input type="text" class="comment-input" v-model="comment">
+							<div class="comment-register">등록</div>
 						</div>
+
+						<div v-for="(comment) in comments" :key="comment.commentId">	
+							<div class="display-flex comments">
+								<div class="comment-id">{{ comment.id }}</div>
+								<div class="comment-contents">{{ comment.contents }}</div>
+								<div class="comment-date">{{ convertDate(comment.date) }}</div>
+							</div>
+						</div>
+
 					</div>
 
 				</div>
@@ -278,9 +232,58 @@ selectAll(
 .text-aligne-center { text-align: center }
 .display-flex { display: flex }
 .outline-none { outline: none;}
+.bold-18 { font-weight: bold; font-size: 18px; }
+.font-weight-bold { font-weight: bold; }
+.margin-bottom-8 {margin-bottom: 8px;}
 
 .comment-wrap {
 	margin-left: 16px
+}
+
+.comments {
+	width: 520px;
+	margin-bottom: 8px;
+	border-bottom: 1px solid rgb(232, 232, 232);
+}
+
+.comment-input {
+	width: 320px;
+	border: none;
+
+	outline: none;
+
+	border-radius: 8px;
+	background-color: rgb(245, 245, 245);
+
+}
+
+.comment-register {
+
+	width: 80px;
+
+	margin-left: 12px;
+
+	text-align: center;
+
+	font-weight: bold;
+
+	background-color: #F7E600; color: #3A1D1D;
+	border-radius: 8px;
+	line-height: 28px;
+
+	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+.comment-id {
+	width: 100px;
+}
+
+.comment-contents {
+	width: 320px;
+}
+
+.comment-date {
+	width: 100px;
 }
 
 #create {	
@@ -332,7 +335,7 @@ selectAll(
 }
 
 .article-comment {
-	margin: 18px;
+	margin-left: 18px; margin-bottom: 8px;
 
 	text-align: left;
 
@@ -525,10 +528,6 @@ selectAll(
 #body .content-head {
 	width: 560px;
 	display: flex;
-}
-
-.font-weight-bold {
-	font-weight: bold;
 }
 
 #body .content-head .content-id {
