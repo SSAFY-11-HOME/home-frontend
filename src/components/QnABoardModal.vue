@@ -2,13 +2,20 @@
 
 import { ref } from 'vue';
 import { selectAll } from '@/api/qna';
+import { useUserStore } from '@/stores/counter';
 
 const modalCheck = ref(false);
 const writeCheck = ref(false);
 const qnaList = ref([])
 
+const userStore = useUserStore();
+
 function openModal() {
 	modalCheck.value = !modalCheck.value;
+}
+
+function openWriteModal() {
+	writeCheck.value = !writeCheck.value;
 }
 
 function convertDate(date) {
@@ -41,6 +48,7 @@ selectAll(
 				<div id="header">
 					<img src="@/assets/logo.png" alt="logo" id="logo">
 					<div id="title">Q & A</div>
+					<div id="write" v-if="userStore.isLogin" @click="openWriteModal">글쓰기</div>
 				</div>
 
 				<div id="body">
@@ -69,6 +77,9 @@ selectAll(
 				<div id="header">
 					<img src="@/assets/logo.png" alt="logo" id="logo">
 					<div id="title">글 쓰기</div>
+					<div id="backspace" @click="router.go(-1)">
+						<img src="@/assets/close.png" alt="">
+					</div>
 				</div>
 
 				<div id="body">
@@ -85,6 +96,15 @@ selectAll(
 </template>
 
 <style scoped>
+
+#backspace {
+  width: 24px; height: 24px;
+  margin-left: 16px; margin-right: 16px;
+}
+
+#backspace img {
+  widows: 100%; height: 100%;
+}
 
 #box {
 	position: fixed;
@@ -134,6 +154,25 @@ selectAll(
 	width: 520px;
 	display: flex;
 	margin: 12px
+}
+
+.modal-container #write {
+	width: 96px; height: 32px;
+
+	position: absolute;
+	top: 48px; right: 24px;
+
+	font-weight: bold; font-size: 16px;
+	line-height: 32px;
+
+	color: #3A1D1D;
+	background-color: #F7E600;
+
+	border-radius: 8px;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+
+	cursor: pointer;
+
 }
 
 .modal-container #body {

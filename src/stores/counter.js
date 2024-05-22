@@ -101,12 +101,18 @@ export const useKakaoStore = defineStore('kakao', () => {
         marker.setMap(null);
       })
       
-      // 지도 중심좌표를 얻어옵니다 
-      var latlng = map.getCenter(); 
+      // 지도의 영역을 반환
+      var latlng = map.getBounds();
+
+      console.log(latlng.qa);
+      console.log(latlng.pa);
+      console.log(latlng.ha);
+      console.log(latlng.oa);
       
       selectAllByRange(
-        {lat: latlng.getLat(), lng: latlng.getLng()},
+        {lat1: latlng.qa, lat2: latlng.pa, lng1: latlng.ha, lng2: latlng.oa},
         ({data}) => {
+          console.log(data);
           houseStore.setHouses(data);
 
           // 건물 정보 update 이후, 마커 생성
@@ -114,17 +120,17 @@ export const useKakaoStore = defineStore('kakao', () => {
             // 마커가 표시될 위치입니다 
             var markerPosition  = new window.kakao.maps.LatLng(house.lat, house.lng);
 
-            // var imageSrc = 'https://picsum.photos/64/64', // 마커이미지의 주소입니다    
-            var imageSrc = '../../../src/assets/logo.png'
-            var imageSize = new window.kakao.maps.Size(64, 69) // 마커이미지의 크기입니다
-            var imageOption = {offset: new window.kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+            // // var imageSrc = 'https://picsum.photos/64/64', // 마커이미지의 주소입니다    
+            // var imageSrc = '../../../src/assets/logo.png'
+            // var imageSize = new window.kakao.maps.Size(64, 69) // 마커이미지의 크기입니다
+            // var imageOption = {offset: new window.kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
               
-            // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
-            var markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize, imageOption)
+            // // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+            // var markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize, imageOption)
       
             // 마커를 생성합니다.
             var marker = new window.kakao.maps.Marker({
-              image: markerImage,
+              // image: markerImage,
               map: map,
               position: markerPosition,
               clickable: true
@@ -177,13 +183,14 @@ export const useKakaoStore = defineStore('kakao', () => {
 
   function init(router) {
 
-    console.log("init");
+    map.setMinLevel(2);
+    map.setMaxLevel(4);
 
-    // 지도 중심좌표를 얻어옵니다 
-    var latlng = map.getCenter(); 
+    // 지도의 영역을 반환
+    var latlng = map.getBounds(); 
       
     selectAllByRange(
-      {lat: latlng.getLat(), lng: latlng.getLng()},
+      {lat1: latlng.qa, lat2: latlng.pa, lng1: latlng.ha, lng2: latlng.oa},
       ({data}) => {
         houseStore.setHouses(data);
 
