@@ -2,12 +2,12 @@
 
 import { ref } from 'vue';
 import { useUserStore } from '@/stores/counter';
-import { join } from '@/api/user';
+import { join, login } from '@/api/user';
 
 const userStore = useUserStore();
 
 const modalCheck = ref(false);
-const pageCheck = ref(false);
+const pageCheck = ref(true);
 
 const id = ref('');
 const pw = ref('');
@@ -24,7 +24,16 @@ function changePage() {
 	pageCheck.value = !pageCheck.value;
 }
 
-function login() {
+function userLogin() {
+
+	login({id: id.value, pw: pw.value},
+		({data}) => {
+			userStore.login(data["access-token"])
+		},
+		(error) => {
+			console.log(error);
+		})
+
 	userStore.login('json web token');
 	openModal();
 }
@@ -51,7 +60,7 @@ function userJoin() {
 <template>
 	<div id="box">
 		<button class="button" @click="openModal" v-if="!userStore.isLogin">로그인</button>
-		<button class="button" @click="openModal" v-if="userStore.isLogin">사용자</button>
+		<button class="button" @click="userStore.logout" v-if="userStore.isLogin">로그아웃</button>
 	</div>
 
 	<div class="modal-wrap" v-show="modalCheck" @click="openModal">
@@ -72,7 +81,7 @@ function userJoin() {
 					<input type="password" class="input-box" placeholder="비밀번호" v-model="pw">
 				</div>
 				
-				<button id="login-button" @click="login">로그인</button>
+				<button id="login-button" @click="userLogin">로그인</button>
 
 
 				<div id="join-tab">

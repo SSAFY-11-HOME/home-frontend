@@ -24,7 +24,7 @@ function changeViewStatus(status) {
 
 function create() {
 
-	createArticle({title: title.value, content: content.value},
+	createArticle({title: title.value, contents: content.value},
 	({data}) => {
 		console.log(data);
 	},
