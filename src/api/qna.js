@@ -13,6 +13,12 @@ function createArticle(param, success, fail) {
 	.catch(fail);
 }
 
+function selectArticleById(param, success, fail) {
+	myaxios.get(`/qboard/${param}`)
+	.then(success)
+	.catch(fail);
+}
+
 export {
-    selectAll, createArticle
+    selectAll, createArticle, selectArticleById
 }

@@ -1,14 +1,13 @@
 <script setup>
 
 import { ref, watch } from 'vue';
-import { selectAll, createArticle } from '@/api/qna';
+import { selectAll, createArticle, selectArticleById } from '@/api/qna';
 import { useUserStore } from '@/stores/counter';
 
 const title = ref('');
 const content = ref('');
 
 const modalCheck = ref(true);
-const isModifyPossible = ref(false);
 const viewStatus = ref('QNA');	
 const qnaList = ref([])
 
@@ -27,6 +26,13 @@ function openModal() {
 }
 
 function changeViewStatus(status) {
+
+
+	if(status === "WRITE") {
+		title.value = '';
+		content.value = '';
+	}
+
 	viewStatus.value = status;
 }
 
@@ -51,15 +57,29 @@ function convertDate(date) {
 // [TODO] 개인 페이지...
 
 watch(viewStatus, (newValue, oldValue) => {
-	if(newValue !== "QNA") return;
-	selectAll(
+	if(newValue === "QNA") {
+		selectAll(
+			({data}) => {
+				qnaList.value = data;
+			},
+			(error) => {
+				console.log(error);
+			}
+		)
+	}
+
+	if(newValue !== "QNA" && newValue !== "WRITE") {
+		selectArticleById(newValue,
 		({data}) => {
-			qnaList.value = data;
+			console.log(data);
+			title.value = data.current.title;
+			content.value = data.current.contents;
 		},
 		(error) => {
 			console.log(error);
-		}
-	)
+		})
+	}
+	
 })
 
 selectAll(
@@ -156,14 +176,14 @@ selectAll(
 				<div id="body">
 					<div class="display-flex">
 						<div class="article-title"> 제목 </div>
-						<input type="text" id="title-input" class="outline-none">
+						<input type="text" id="title-input" class="outline-none" v-model="title">
 					</div>
 
 					<div class="display-flex">
 						<div class="article-content">
 							내용
 						</div>
-						<textarea id="content-input" class="outline-none"></textarea>
+						<textarea id="content-input" class="outline-none" v-model="content"></textarea>
 					</div>
 				</div>
 
