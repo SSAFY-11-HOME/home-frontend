@@ -19,6 +19,20 @@ function selectArticleById(param, success, fail) {
 	.catch(fail);
 }
 
+function deleteArticleById(param, success, fail) {
+	myaxios.defaults.headers["Authorization"] = window.localStorage.getItem("JWT");
+	myaxios.delete(`/qboard`, {data : param})
+	.then(success)
+	.catch(fail);
+}
+
+function modifyArticleById(param, success, fail) {
+	myaxios.defaults.headers["Authorization"] = window.localStorage.getItem("JWT");
+	myaxios.put(`/qboard`, param)
+	.then(success)
+	.catch(fail);
+}
+
 export {
-    selectAll, createArticle, selectArticleById
+    selectAll, createArticle, selectArticleById, deleteArticleById, modifyArticleById
 }

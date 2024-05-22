@@ -1,17 +1,34 @@
 <script setup>
 
 import { ref, watch } from 'vue';
-import { selectAll, createArticle, selectArticleById } from '@/api/qna';
+import { selectAll, createArticle, selectArticleById, deleteArticleById, modifyArticleById } from '@/api/qna';
 import { useUserStore } from '@/stores/counter';
 
-const title = ref('');
-const content = ref('');
+
 
 const modalCheck = ref(true);
 const viewStatus = ref('QNA');	
 const qnaList = ref([])
 
 const userStore = useUserStore();
+
+const articleId = ref('');
+const userId = ref('');
+const date = ref('');
+const title = ref('');
+const content = ref('');
+const count = ref('');
+
+/*
+"current": {
+	"articleId": 17,
+	"id": "ssafy",
+	"date": "2024-05-22 02:51:45",
+	"title": "siuuuu",
+	"contents": "siuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu",
+	"count": 2
+},
+*/
 
 function truncateString(str) {
 	if (str.length > 10) {
@@ -49,6 +66,29 @@ function create() {
 	changeViewStatus("QNA")
 }
 
+// id, articleId, title, contents
+function articleModify() {
+	modifyArticleById({id: userId.value, articleId: articleId.value, title: title.value, contents: content.value},
+	({data}) => {
+		console.log(data);
+	},
+	(error) => {
+		console.log(error);
+	})
+	changeViewStatus('QNA')
+}
+
+function articleDelete() {
+	deleteArticleById({id: userId.value, articleId: articleId.value},
+	({data}) => {
+		console.log(data);
+	},
+	(error) => {
+		console.log(error);
+	})
+	changeViewStatus('QNA')
+}
+
 function convertDate(date) {
 	return date.split(" ")[0];
 }
@@ -71,9 +111,12 @@ watch(viewStatus, (newValue, oldValue) => {
 	if(newValue !== "QNA" && newValue !== "WRITE") {
 		selectArticleById(newValue,
 		({data}) => {
-			console.log(data);
+			articleId.value = data.current.articleId;
+			userId.value = data.current.id
+			date.value = data.current.date;
 			title.value = data.current.title;
 			content.value = data.current.contents;
+			count.value = data.current.count;
 		},
 		(error) => {
 			console.log(error);
@@ -81,6 +124,17 @@ watch(viewStatus, (newValue, oldValue) => {
 	}
 	
 })
+
+/*
+"current": {
+	"articleId": 17,
+	"id": "ssafy",
+	"date": "2024-05-22 02:51:45",
+	"title": "siuuuu",
+	"contents": "siuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu",
+	"count": 2
+},
+*/
 
 selectAll(
 	({data}) => {
@@ -168,22 +222,22 @@ selectAll(
 				<div id="header">
 					<img src="@/assets/logo.png" alt="logo" id="logo">
 					<div id="title">게시글</div>
-					<div id="article-modify" v-if="userStore.isLogin" @click="changeViewStatus('QNA')">수정</div>
-					<div id="article-delete" v-if="userStore.isLogin" @click="changeViewStatus('QNA')">삭제</div>
+					<div id="article-modify" v-if="userStore.getUserId() === userId" @click="articleModify">수정</div>
+					<div id="article-delete" v-if="userStore.getUserId() === userId" @click="articleDelete">삭제</div>
 					<div id="write" v-if="userStore.isLogin" @click="changeViewStatus('QNA')">돌아가기</div>
 				</div>
 
 				<div id="body">
 					<div class="display-flex">
 						<div class="article-title"> 제목 </div>
-						<input type="text" id="title-input" class="outline-none" v-model="title">
+						<input type="text" id="title-input" class="outline-none" v-model="title" v-bind:readonly="userStore.getUserId() !== userId">
 					</div>
 
 					<div class="display-flex">
 						<div class="article-content">
 							내용
 						</div>
-						<textarea id="content-input" class="outline-none" v-model="content"></textarea>
+						<textarea id="content-input" class="outline-none" v-model="content" v-bind:readonly="userStore.getUserId() !== userId"></textarea>
 					</div>
 				</div>
 

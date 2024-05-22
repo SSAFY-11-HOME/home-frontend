@@ -34,7 +34,6 @@ function userLogin() {
 			console.log(error);
 		})
 
-	userStore.login('json web token');
 	openModal();
 }
 

@@ -2,6 +2,7 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
 import { selectAllByRange } from '@/api/house';
+import { Base64 } from 'js-base64';
 
 const {VITE_KAKAO_API_KEY} = import.meta.env;
 
@@ -36,22 +37,42 @@ export const useHouseStore = defineStore('house', () => {
 export const useUserStore = defineStore('user', () => {
 
   const jwt = ref(window.localStorage.getItem('JWT'));
+  const userId = ref('');
 
   const isLogin = computed(() => {
     return (jwt.value !== 'null');
   });
 
   function login(token) {
+    console.log("useUserStore. login. token : " + token);
     jwt.value = token;
     window.localStorage.setItem('JWT', token);
+    userId.value = parseUserId(token);
+
   }
 
   function logout() {
     jwt.value = 'null';
     window.localStorage.setItem('JWT', 'null');
+    userId.value = 'null';
   }
 
-  return { jwt, isLogin, login, logout };
+  function getUserId() {
+    return userId.value;
+  }
+
+  function parseUserId(jwt) {
+    let payload = jwt.split(".")[1];
+    console.log(payload);
+    let decodedPayload = Base64.decode(payload);
+    let jsonPayload = JSON.parse(decodedPayload);
+
+    return jsonPayload.userId;
+  }
+
+
+
+  return { jwt, isLogin, login, logout, getUserId };
 
 })
 
