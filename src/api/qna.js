@@ -6,6 +6,14 @@ function selectAll(success, fail) {
 	.catch(fail);
 }
 
+function createArticle(param, success, fail) {
+	console.log(window.localStorage.getItem("JWT"));
+	myaxios.defaults.headers["Authorization"] = window.localStorage.getItem("JWT");
+	myaxios.post(`/qboard`, param)
+	.then(success)
+	.catch(fail);
+}
+
 export {
-    selectAll
+    selectAll, createArticle
 }
