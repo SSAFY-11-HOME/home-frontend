@@ -33,6 +33,16 @@ function modifyArticleById(param, success, fail) {
 	.catch(fail);
 }
 
+function createComment(param, success, fail) {
+
+	console.log(param);
+
+	myaxios.defaults.headers["Authorization"] = window.localStorage.getItem("JWT");
+	myaxios.post(`/qboard/comment`, param)
+	.then(success)
+	.catch(fail);
+}
+
 export {
-    selectAll, createArticle, selectArticleById, deleteArticleById, modifyArticleById
+    selectAll, createArticle, selectArticleById, deleteArticleById, modifyArticleById, createComment
 }

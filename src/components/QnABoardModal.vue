@@ -1,7 +1,7 @@
 <script setup>
 
 import { ref, watch } from 'vue';
-import { selectAll, createArticle, selectArticleById, deleteArticleById, modifyArticleById } from '@/api/qna';
+import { selectAll, createArticle, selectArticleById, deleteArticleById, modifyArticleById, createComment } from '@/api/qna';
 import { useUserStore } from '@/stores/counter';
 
 
@@ -90,6 +90,19 @@ watch(viewStatus, (newValue, oldValue) => {
 	}
 	
 })
+
+function registerComment() {
+	createComment({articleId: articleId.value, id: userStore.getUserId, contents: comment.value},
+	({data}) => {}, (error) => {});
+
+	selectArticleById(viewStatus,
+		({data}) => {
+			comments.value = data.comments;
+		},
+		(error) => {
+			console.log(error);
+		})
+}
 
 selectAll(
 	({data}) => {
@@ -203,9 +216,9 @@ selectAll(
 					<div class="comment-wrap">
 
 						<div class="display-flex margin-bottom-8">
-							<div class="bold-18 comment-id ">{{ userId }}</div>
+							<div class="bold-18 comment-id ">{{ userStore.getUserId }}</div>
 							<input type="text" class="comment-input" v-model="comment">
-							<div class="comment-register">등록</div>
+							<div class="comment-register" @click="registerComment">등록</div>
 						</div>
 
 						<div v-for="(comment) in comments" :key="comment.commentId">	
