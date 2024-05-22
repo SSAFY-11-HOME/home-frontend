@@ -2,6 +2,8 @@
 import NavigationView from '@/views/NavigationView.vue';
 import KakaoMap from '@/components/KakaoMap.vue';
 import LoginModal from '@/components/LoginModal.vue';
+import QnABoardModal from './components/QnABoardModal.vue';
+
 import { onMounted } from 'vue';
 
 import { useKakaoStore } from './stores/counter';
@@ -23,6 +25,7 @@ onMounted(() => {
 <template>
   <div>
 	<LoginModal/>
+	<QnABoardModal/>
     <NavigationView/>
     <KakaoMap/>
   </div>

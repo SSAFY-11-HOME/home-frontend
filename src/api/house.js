@@ -1,7 +1,7 @@
 import myaxios from "@/utils/axios-common.js"
 
 function selectAllByRange(param, success, fail) {
-	myaxios.get(`/house/area?lat=${param.lat}&lng=${param.lng}`)
+	myaxios.get(`/house/area?lat1=${param.lat1}&lat2=${param.lat2}&lng1=${param.lng1}&lng2=${param.lng2}`)
 	.then(success)
 	.catch(fail);
 }

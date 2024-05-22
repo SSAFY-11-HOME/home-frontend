@@ -45,15 +45,13 @@ const newsList = ref([
       <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
           
-          <div class="carousel-item active" v-for="(news) in newsList" :key="news.title">
+          <div class="carousel-item" v-for="(news, index) in newsList" :key="news.title" :class="{ active: index === 0 }">
             <div class="card-news" @click="go(news.link)">
               <div class="news-title">{{ news.title }}</div>
               <div class="news-description">{{ news.description }}</div>
               <div class="news-date">{{ convertDate(news.pubDate) }}</div>
             </div>
           </div>
-
-          
 
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">

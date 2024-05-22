@@ -2,6 +2,7 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
 import { selectAllByRange } from '@/api/house';
+import { Base64 } from 'js-base64';
 
 const {VITE_KAKAO_API_KEY} = import.meta.env;
 
@@ -36,22 +37,40 @@ export const useHouseStore = defineStore('house', () => {
 export const useUserStore = defineStore('user', () => {
 
   const jwt = ref(window.localStorage.getItem('JWT'));
+  const userId = ref('');
 
   const isLogin = computed(() => {
     return (jwt.value !== 'null');
   });
 
   function login(token) {
+    console.log("useUserStore. login. token : " + token);
     jwt.value = token;
     window.localStorage.setItem('JWT', token);
+    userId.value = parseUserId(token);
+
   }
 
   function logout() {
     jwt.value = 'null';
     window.localStorage.setItem('JWT', 'null');
+    userId.value = 'null';
   }
 
-  return { jwt, isLogin, login, logout };
+  const getUserId = computed(() => userId.value);
+
+  function parseUserId(jwt) {
+    let payload = jwt.split(".")[1];
+    console.log(payload);
+    let decodedPayload = Base64.decode(payload);
+    let jsonPayload = JSON.parse(decodedPayload);
+
+    return jsonPayload.userId;
+  }
+
+
+
+  return { jwt, isLogin, login, logout, getUserId };
 
 })
 
@@ -63,7 +82,7 @@ export const useKakaoStore = defineStore('kakao', () => {
   const lat = ref(37.501486255964835);
   const lng = ref(127.03780378177515);
   let map = null;
-  const markers = ref([]);
+  const markers = [];
 
   function loadScript(router) {
     const script = document.createElement('script')
@@ -95,17 +114,17 @@ export const useKakaoStore = defineStore('kakao', () => {
   function dragendMap(router) {
 
     window.kakao.maps.event.addListener(map, 'dragend', function() {  
-  
+
       // 마커 지우기!!
-      markers.value.forEach((marker) => {
-        marker.setMap(null);
-      })
+      for(let i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
+      }
       
-      // 지도 중심좌표를 얻어옵니다 
-      var latlng = map.getCenter(); 
+      // 지도의 영역을 반환
+      var latlng = map.getBounds();
       
       selectAllByRange(
-        {lat: latlng.getLat(), lng: latlng.getLng()},
+        {lat1: latlng.qa, lat2: latlng.pa, lng1: latlng.ha, lng2: latlng.oa},
         ({data}) => {
           houseStore.setHouses(data);
 
@@ -113,15 +132,24 @@ export const useKakaoStore = defineStore('kakao', () => {
           houseStore.getHouses.forEach((house) => {
             // 마커가 표시될 위치입니다 
             var markerPosition  = new window.kakao.maps.LatLng(house.lat, house.lng);
+
+            // // var imageSrc = 'https://picsum.photos/64/64', // 마커이미지의 주소입니다    
+            // var imageSrc = '../../../src/assets/logo.png'
+            // var imageSize = new window.kakao.maps.Size(64, 69) // 마커이미지의 크기입니다
+            // var imageOption = {offset: new window.kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+              
+            // // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+            // var markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize, imageOption)
       
             // 마커를 생성합니다.
             var marker = new window.kakao.maps.Marker({
+              // image: markerImage,
               map: map,
               position: markerPosition,
               clickable: true
             });
       
-            markers.value.push(marker);
+            markers.push(marker);
       
             // 마커에 클릭이벤트를 등록합니다
             window.kakao.maps.event.addListener(marker, 'click', function() {
@@ -168,13 +196,14 @@ export const useKakaoStore = defineStore('kakao', () => {
 
   function init(router) {
 
-    console.log("init");
+    map.setMinLevel(2);
+    map.setMaxLevel(4);
 
-    // 지도 중심좌표를 얻어옵니다 
-    var latlng = map.getCenter(); 
+    // 지도의 영역을 반환
+    var latlng = map.getBounds(); 
       
     selectAllByRange(
-      {lat: latlng.getLat(), lng: latlng.getLng()},
+      {lat1: latlng.qa, lat2: latlng.pa, lng1: latlng.ha, lng2: latlng.oa},
       ({data}) => {
         houseStore.setHouses(data);
 
