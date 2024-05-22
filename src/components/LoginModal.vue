@@ -2,7 +2,7 @@
 
 import { ref } from 'vue';
 import { useUserStore } from '@/stores/counter';
-import { join, login } from '@/api/user';
+import { join, login, logout } from '@/api/user';
 
 const userStore = useUserStore();
 
@@ -54,12 +54,27 @@ function userJoin() {
 	)
 }
 
+function userLogout() {
+
+	logout(userStore.getUserId,
+		({data}) => {
+			console.log(data);
+		},
+		(error) => {
+			console.log(error);
+		}
+	)
+
+	userStore.logout();
+
+}
+
 </script>
 
 <template>
 	<div id="box">
 		<button class="button" @click="openModal" v-if="!userStore.isLogin">로그인</button>
-		<button class="button" @click="userStore.logout" v-if="userStore.isLogin">로그아웃</button>
+		<button class="button" @click="userLogout" v-if="userStore.isLogin">로그아웃</button>
 	</div>
 
 	<div class="modal-wrap" v-show="modalCheck" @click="openModal">

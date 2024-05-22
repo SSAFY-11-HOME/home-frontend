@@ -57,9 +57,7 @@ export const useUserStore = defineStore('user', () => {
     userId.value = 'null';
   }
 
-  function getUserId() {
-    return userId.value;
-  }
+  const getUserId = computed(() => userId.value);
 
   function parseUserId(jwt) {
     let payload = jwt.split(".")[1];

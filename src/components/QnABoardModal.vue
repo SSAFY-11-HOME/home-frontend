@@ -19,6 +19,10 @@ const title = ref('');
 const content = ref('');
 const count = ref('');
 
+// const 
+
+const comments = ref('');
+
 /*
 "current": {
 	"articleId": 17,
@@ -43,7 +47,6 @@ function openModal() {
 }
 
 function changeViewStatus(status) {
-
 
 	if(status === "WRITE") {
 		title.value = '';
@@ -111,12 +114,14 @@ watch(viewStatus, (newValue, oldValue) => {
 	if(newValue !== "QNA" && newValue !== "WRITE") {
 		selectArticleById(newValue,
 		({data}) => {
+			console.log(data.comments);
 			articleId.value = data.current.articleId;
 			userId.value = data.current.id
 			date.value = data.current.date;
 			title.value = data.current.title;
 			content.value = data.current.contents;
 			count.value = data.current.count;
+			comments.value = data.comments;
 		},
 		(error) => {
 			console.log(error);
@@ -222,23 +227,43 @@ selectAll(
 				<div id="header">
 					<img src="@/assets/logo.png" alt="logo" id="logo">
 					<div id="title">게시글</div>
-					<div id="article-modify" v-if="userStore.getUserId() === userId" @click="articleModify">수정</div>
-					<div id="article-delete" v-if="userStore.getUserId() === userId" @click="articleDelete">삭제</div>
+					<div id="article-modify" v-if="userStore.getUserId === userId" @click="articleModify">수정</div>
+					<div id="article-delete" v-if="userStore.getUserId === userId" @click="articleDelete">삭제</div>
 					<div id="write" v-if="userStore.isLogin" @click="changeViewStatus('QNA')">돌아가기</div>
 				</div>
 
 				<div id="body">
 					<div class="display-flex">
 						<div class="article-title"> 제목 </div>
-						<input type="text" id="title-input" class="outline-none" v-model="title" v-bind:readonly="userStore.getUserId() !== userId">
+						<input type="text" id="title-input" class="outline-none" v-model="title" v-bind:readonly="userStore.getUserId !== userId">
 					</div>
 
 					<div class="display-flex">
 						<div class="article-content">
 							내용
 						</div>
-						<textarea id="content-input" class="outline-none" v-model="content" v-bind:readonly="userStore.getUserId() !== userId"></textarea>
+						<textarea id="content-input" class="outline-none" v-model="content" v-bind:readonly="userStore.getUserId !== userId"></textarea>
 					</div>
+
+					<div class="display-flex">
+						<div class="article-comment font-weight-bold">답글</div>
+					</div>
+
+					<!-- 답글 -->
+					<div class="comment-wrap">
+						<div v-for="(comment) in comments" :key="comment.commentId">
+							
+							<div class="display-flex">
+								<div>{{ comment.id }}</div>
+								<div>{{ comment.contents }}</div>
+								<div>{{comment.date}}</div>
+							</div>
+
+
+
+						</div>
+					</div>
+
 				</div>
 
 			</div>
@@ -253,6 +278,10 @@ selectAll(
 .text-aligne-center { text-align: center }
 .display-flex { display: flex }
 .outline-none { outline: none;}
+
+.comment-wrap {
+	margin-left: 16px
+}
 
 #create {	
 
@@ -302,8 +331,17 @@ selectAll(
 	font-weight: bold;
 }
 
+.article-comment {
+	margin: 18px;
+
+	text-align: left;
+
+	font-size: 18px;
+	font-weight: bold;
+}
+
 #content-input {
-	width: 420px; height: 400px;
+	width: 420px; height: 240px;
 	margin: 18px;
 
 	border: none;
@@ -487,6 +525,10 @@ selectAll(
 #body .content-head {
 	width: 560px;
 	display: flex;
+}
+
+.font-weight-bold {
+	font-weight: bold;
 }
 
 #body .content-head .content-id {
